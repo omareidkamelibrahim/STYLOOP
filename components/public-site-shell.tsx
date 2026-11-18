@@ -1,0 +1,15 @@
+import { ArrowRight } from "lucide-react"
+
+const logoUrl = "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/STYLOOP-MAIN%20LOGO-P0XcxaqQZWzsMxbb3Fi8KdE90BO01c.jpg"
+
+export function PublicSiteHeader() {
+  return <><div className="announcement">A little more you, in every piece. <a href="/custom-printing">Make it yours <ArrowRight aria-hidden="true" /></a></div><header className="site-header public-site-header"><a className="brand" href="/" aria-label="STYLOOP home"><img src={logoUrl} alt="STYLOOP — Wear your style" /></a><nav aria-label="Main navigation"><a href="/shop">Shop</a><a href="/shop?sort=newest">New arrivals</a><a href="/custom-printing">Custom printing</a><a href="/about">Our story</a><a href="/contact">Contact</a></nav><a className="public-bag-link" href="/shop">Explore the shop <ArrowRight aria-hidden="true" /></a></header></>
+}
+
+export function PublicSiteFooter() {
+  return <footer className="site-footer public-site-footer"><div className="footer-top"><a className="footer-brand" href="/"><img src={logoUrl} alt="STYLOOP — Wear your style" /><span>WEAR YOUR STYLE</span></a><div className="footer-message"><span className="eyebrow">A LITTLE MORE YOU, EVERY DAY</span><p>Get dressed like <em>yourself.</em></p><a href="/shop">Find your next favorite <ArrowRight aria-hidden="true" /></a></div><div className="footer-contact"><span className="eyebrow">HERE TO HELP</span><p>Questions or a good idea?</p><a href="mailto:hello@styloop.com">hello@styloop.com <ArrowRight aria-hidden="true" /></a></div></div><div className="footer-links"><div><span className="eyebrow">EXPLORE</span><a href="/shop">Shop all</a><a href="/custom-printing">Custom printing</a><a href="/about">About STYLOOP</a></div><div><span className="eyebrow">CUSTOMER CARE</span><a href="/faq">FAQs</a><a href="/shipping">Shipping</a><a href="/returns">Returns</a></div><div><span className="eyebrow">INFORMATION</span><a href="/privacy">Privacy policy</a><a href="/terms">Terms of service</a><a href="/contact">Contact</a></div></div><div className="footer-bottom"><span>© 2026 STYLOOP. Wear your style.</span><a href="#top">Back to top ↑</a></div></footer>
+}
+
+export function PublicPageLayout({ children }: { children: React.ReactNode }) {
+  return <div className="storefront"><PublicSiteHeader />{children}<PublicSiteFooter /></div>
+}
