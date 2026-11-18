@@ -3,6 +3,7 @@ import { notFound } from "next/navigation"
 import { ArrowRight } from "lucide-react"
 import { PublicPageLayout } from "@/components/public-site-shell"
 import { QuoteRequestForm } from "@/components/quote-request-form"
+import { CustomPrintingPage } from "@/components/custom-printing-page"
 import { getStorePolicies, type StorePolicy } from "@/lib/shopify"
 
 const pages = {
@@ -38,6 +39,8 @@ function PolicyContent({ policy }: { policy: StorePolicy | null }) {
 export default async function InformationalPage({ params }: PageProps) {
   const { slug } = await params
   if (slug === "faq") return <PublicPageLayout><main className="information-page"><header className="information-heading"><span className="eyebrow">HERE TO HELP</span><h1>Frequently <em>asked.</em></h1><p>Quick answers to the things customers ask us most.</p></header><div className="faq-list">{faqItems.map(([question, answer]) => <details key={question}><summary>{question}<span aria-hidden="true">+</span></summary><p>{answer}</p></details>)}</div><a className="information-cta" href="/contact">Still have a question? Get in touch <ArrowRight aria-hidden="true" /></a></main></PublicPageLayout>
+
+  if (slug === "custom-printing") return <PublicPageLayout><CustomPrintingPage /></PublicPageLayout>
 
   if (slug in pages) {
     const page = pages[slug as keyof typeof pages]
