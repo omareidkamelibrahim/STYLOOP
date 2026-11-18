@@ -9,6 +9,7 @@ export const runtime = "nodejs"
 const maxFiles = 3
 const maxFileBytes = 8 * 1024 * 1024
 const allowedTypes = new Set(["image/png", "image/jpeg", "application/pdf"])
+const allowedPrintingLocations = new Set(["front", "back", "sleeve", "other"])
 function textValue(form: FormData, key: string, maxLength: number) {
   const value = form.get(key)
   return typeof value === "string" ? value.trim().slice(0, maxLength) : ""
@@ -26,8 +27,9 @@ function parseSizes(value: string) {
     const match = entry.match(/^([a-z0-9][a-z0-9 /-]{0,19})\s*:\s*(\d{1,4})$/i)
     if (!match) return null
     const quantity = Number(match[2])
-    if (quantity < 1 || quantity > 10000) return null
-    result[match[1].trim().toUpperCase()] = quantity
+    const size = match[1].trim().toUpperCase()
+    if (quantity < 1 || quantity > 10000 || size in result) return null
+    result[size] = quantity
   }
   return Object.keys(result).length <= 20 ? result : null
 }
@@ -73,17 +75,27 @@ export async function POST(request: NextRequest) {
   const deliveryLocation = textValue(form, "deliveryLocation", 240)
   const deliveryDate = textValue(form, "requiredDeliveryDate", 10)
   const sizes = parseSizes(textValue(form, "sizes", 300))
-  const locations = form.getAll("printingLocations").filter((value): value is string => typeof value === "string").slice(0, 4)
+  const locationValues = form.getAll("printingLocations")
+  const locations = locationValues.filter((value): value is string => typeof value === "string")
   const files = form.getAll("artwork").filter((value): value is File => value instanceof File && value.size > 0)
 
   if (!customerName || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || !garmentType || !quantity || !designCount || !deliveryLocation || !sizes) {
     return NextResponse.json({ error: "Please complete the required fields and check the size breakdown format." }, { status: 400 })
   }
+  if (locations.length !== locationValues.length || locations.length > 4 || locations.some((location) => !allowedPrintingLocations.has(location)) || new Set(locations).size !== locations.length) {
+    return NextResponse.json({ error: "Choose valid, non-duplicated printing locations." }, { status: 400 })
+  }
+  if (Object.keys(sizes).length && Object.values(sizes).reduce((total, sizeQuantity) => total + sizeQuantity, 0) !== quantity) {
+    return NextResponse.json({ error: "The size breakdown must add up to the total quantity." }, { status: 400 })
+  }
   if (files.length > maxFiles || files.some((file) => file.size > maxFileBytes || !allowedTypes.has(file.type))) {
     return NextResponse.json({ error: "Attach up to three PNG, JPG, or PDF files, each no larger than 8 MB." }, { status: 400 })
   }
-  if (deliveryDate && !/^\d{4}-\d{2}-\d{2}$/.test(deliveryDate)) {
-    return NextResponse.json({ error: "Enter a valid delivery date." }, { status: 400 })
+  if (deliveryDate) {
+    const normalizedDate = new Date(`${deliveryDate}T00:00:00.000Z`)
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(deliveryDate) || Number.isNaN(normalizedDate.getTime()) || normalizedDate.toISOString().slice(0, 10) !== deliveryDate) {
+      return NextResponse.json({ error: "Enter a valid delivery date." }, { status: 400 })
+    }
   }
 
   const reference = `STY-${new Date().getUTCFullYear()}-${randomUUID().replaceAll("-", "").slice(0, 10).toUpperCase()}`
