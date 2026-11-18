@@ -1,9 +1,27 @@
-import { ArrowRight } from "lucide-react"
+"use client"
+
+import { useState } from "react"
+import { ArrowRight, Menu, Search, ShoppingBag, X } from "lucide-react"
 
 const logoUrl = "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/STYLOOP-MAIN%20LOGO-P0XcxaqQZWzsMxbb3Fi8KdE90BO01c.jpg"
 
 export function PublicSiteHeader() {
-  return <><div className="announcement">A little more you, in every piece. <a href="/custom-printing">Make it yours <ArrowRight aria-hidden="true" /></a></div><header className="site-header public-site-header"><a className="brand" href="/" aria-label="STYLOOP home"><img src={logoUrl} alt="STYLOOP — Wear your style" /></a><nav aria-label="Main navigation"><a href="/shop">Shop</a><a href="/shop?sort=newest">New arrivals</a><a href="/custom-printing">Custom printing</a><a href="/about">Our story</a><a href="/contact">Contact</a></nav></header></>
+  const [mobileOpen, setMobileOpen] = useState(false)
+
+  return <>
+    <div className="announcement">A little more you, in every piece. <a href="/custom-printing">Make it yours <ArrowRight aria-hidden="true" /></a></div>
+    <header className="site-header">
+      <button className="icon-button mobile-menu-trigger" aria-label={mobileOpen ? "Close navigation" : "Open navigation"} aria-expanded={mobileOpen} aria-controls="public-primary-navigation" onClick={() => setMobileOpen(!mobileOpen)}>{mobileOpen ? <X /> : <Menu />}</button>
+      <a className="brand" href="/" aria-label="STYLOOP home"><img src={logoUrl} alt="STYLOOP — Wear your style" /></a>
+      <nav id="public-primary-navigation" className={mobileOpen ? "primary-nav is-open" : "primary-nav"} aria-label="Main navigation">
+        <a href="/shop" onClick={() => setMobileOpen(false)}>Shop</a><a href="/shop?sort=newest" onClick={() => setMobileOpen(false)}>New arrivals</a><a href="/#categories" onClick={() => setMobileOpen(false)}>Collections</a><a href="/custom-printing" onClick={() => setMobileOpen(false)}>Custom printing</a><a href="/about" onClick={() => setMobileOpen(false)}>Our story</a><a href="/contact" onClick={() => setMobileOpen(false)}>Contact</a>
+      </nav>
+      <div className="header-actions">
+        <a className="icon-button search-trigger" href="/shop" aria-label="Search products"><Search /></a>
+        <a className="icon-button bag-trigger" href="/shop" aria-label="Shopping bag"><ShoppingBag /><span>Bag</span></a>
+      </div>
+    </header>
+  </>
 }
 
 export function PublicSiteFooter() {
