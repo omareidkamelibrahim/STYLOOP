@@ -3,7 +3,7 @@ import { ArrowRight } from "lucide-react"
 const logoUrl = "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/STYLOOP-MAIN%20LOGO-P0XcxaqQZWzsMxbb3Fi8KdE90BO01c.jpg"
 
 export function PublicSiteHeader() {
-  return <><div className="announcement">A little more you, in every piece. <a href="/custom-printing">Make it yours <ArrowRight aria-hidden="true" /></a></div><header className="site-header public-site-header"><a className="brand" href="/" aria-label="STYLOOP home"><img src={logoUrl} alt="STYLOOP — Wear your style" /></a><nav aria-label="Main navigation"><a href="/shop">Shop</a><a href="/shop?sort=newest">New arrivals</a><a href="/custom-printing">Custom printing</a><a href="/about">Our story</a><a href="/contact">Contact</a></nav><a className="public-bag-link" href="/shop">Explore the shop <ArrowRight aria-hidden="true" /></a></header></>
+  return <><div className="announcement">A little more you, in every piece. <a href="/custom-printing">Make it yours <ArrowRight aria-hidden="true" /></a></div><header className="site-header public-site-header"><a className="brand" href="/" aria-label="STYLOOP home"><img src={logoUrl} alt="STYLOOP — Wear your style" /></a><nav aria-label="Main navigation"><a href="/shop">Shop</a><a href="/shop?sort=newest">New arrivals</a><a href="/custom-printing">Custom printing</a><a href="/about">Our story</a><a href="/contact">Contact</a></nav></header></>
 }
 
 export function PublicSiteFooter() {
